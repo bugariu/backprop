@@ -30,10 +30,26 @@ int main(int argc, char *argv[])
     Q_UNUSED(argc);
     Q_UNUSED(argv);
 
-    backprop::Network network{{2, 3, 1}};
+    qsrand(time(0));
+    backprop::Network network{{2, 4, 1}};
 
-    auto result = network.FeedForward({-1, 1});
-
-    qInfo() << result;
-
+    double gamma = 0.3;
+    double dd = 0.999;
+    for(int i=0; i<100000; i++)
+    {
+        auto result = network.FeedForward({0, 0});
+        qInfo() << result;
+        network.BackPropagation({0}, gamma);
+        result = network.FeedForward({0, 1});
+        qInfo() << result;
+        network.BackPropagation({1}, gamma);
+        result = network.FeedForward({1, 0});
+        qInfo() << result;
+        network.BackPropagation({1}, gamma);
+        result = network.FeedForward({1, 1});
+        qInfo() << result;
+        network.BackPropagation({0}, gamma);
+        qInfo() << "---";
+        gamma = gamma*dd;
+    }
 }
