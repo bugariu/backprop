@@ -24,6 +24,16 @@
  *********************************************************************************/
 
 #include "network.h"
+#include <QDebug>
+
+QList<QPair<QVector<double>, QVector<double>>> inputs
+{
+    // OR, AND, XOR
+    {{0, 0}, {0, 0, 0}},
+    {{0, 1}, {1, 0, 1}},
+    {{1, 0}, {1, 0, 1}},
+    {{1, 1}, {1, 1, 0}},
+};
 
 int main(int argc, char *argv[])
 {
@@ -31,25 +41,22 @@ int main(int argc, char *argv[])
     Q_UNUSED(argv);
 
     qsrand(time(0));
-    backprop::Network network{{2, 4, 1}};
+    backprop::Network network{{2, 4, 3}};
 
     double gamma = 0.3;
-    double dd = 0.999;
-    for(int i=0; i<100000; i++)
+    double dd = 0.9999;
+    for(int i=0; i<10000; i++)
     {
-        auto result = network.FeedForward({0, 0});
-        qInfo() << result;
-        network.BackPropagation({0}, gamma);
-        result = network.FeedForward({0, 1});
-        qInfo() << result;
-        network.BackPropagation({1}, gamma);
-        result = network.FeedForward({1, 0});
-        qInfo() << result;
-        network.BackPropagation({1}, gamma);
-        result = network.FeedForward({1, 1});
-        qInfo() << result;
-        network.BackPropagation({0}, gamma);
-        qInfo() << "---";
+        for(const auto & it : inputs)
+        {
+            auto result = network.FeedForward(it.first);
+            network.BackPropagation(it.second, gamma);
+        }
         gamma = gamma*dd;
+    }
+    for(auto & it : inputs)
+    {
+        auto result = network.FeedForward(it.first);
+        qInfo() << result;
     }
 }

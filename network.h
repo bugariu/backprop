@@ -27,7 +27,6 @@
 #define BACKPROP_NETWORK_H
 
 #include <QVector>
-#include <QDebug>
 #include <cmath>
 
 namespace backprop
@@ -54,7 +53,6 @@ private:
             for(auto & it : m_NewWeights)
             {
                 it = 5*(RAND_MAX -2.0*rand())/RAND_MAX;
-                qDebug() << it;
             }
             SetNewWeights();
         }
@@ -68,9 +66,9 @@ private:
             }
             m_Output = f(m_Net);
         }
-        void BackPropagation(double outputValue, double gamma)
+        void BackPropagation(double outputError, double gamma)
         {
-            m_Error = df(m_Net)*(outputValue - m_Output);
+            m_Error = df(m_Net)*outputError;
             BackPropAdjust(m_Error, gamma);
         }
         void SetNewWeights()
@@ -176,7 +174,7 @@ public:
                 // last layer
                 for(int n = 0; n < layer.size(); n++)
                 {
-                    layer[n]->BackPropagation(outputValues[n], gamma);
+                    layer[n]->BackPropagation(outputValues[n]-layer[n]->m_Output, gamma);
                 }
             }
             else
