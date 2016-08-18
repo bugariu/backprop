@@ -1,0 +1,16 @@
+V 0.1.0
+=======
+* namespaces
+* add doxygen file
+* create a multi layer network
+* compute output for a input
+* implement backpropagation
+- documentation
+- rename files
+
+
+V 0.2.0
+=======
+- documentation
+- add unit tests?
+- templated container classes, string types etc.

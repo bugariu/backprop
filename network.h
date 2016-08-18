@@ -32,19 +32,30 @@
 namespace backprop
 {
 
+/**
+ * @todo comment
+ */
 class Network
 {
+
 private:
+
+    /**
+     * @todo comment
+     */
     class Neuron
     {
     public:
-        double              m_Output{0};
-        double              m_Net{0};
-        double              m_Error{0};
-        QVector<Neuron *>   m_Predecessors;
-        QVector<double>     m_Weights;
-        QVector<double>     m_NewWeights;
+        double              m_Output{0};    ///< @todo comment
+        double              m_Net{0};       ///< @todo comment
+        double              m_Error{0};     ///< @todo comment
+        QVector<Neuron *>   m_Predecessors; ///< @todo comment
+        QVector<double>     m_Weights;      ///< @todo comment
+        QVector<double>     m_NewWeights;   ///< @todo comment
         Neuron() = default;
+        /**
+         * @todo comment
+         */
         Neuron(const QVector<Neuron *> &predecessors):
             m_Predecessors(predecessors)
         {
@@ -56,6 +67,9 @@ private:
             }
             SetNewWeights();
         }
+        /**
+         * @todo comment
+         */
         void FeedForward()
         {
             m_Error = 0;
@@ -66,29 +80,47 @@ private:
             }
             m_Output = f(m_Net);
         }
+        /**
+         * @todo comment
+         */
         void BackPropagation(double outputError, double gamma)
         {
             m_Error = df(m_Net)*outputError;
             BackPropAdjust(m_Error, gamma);
         }
+        /**
+         * @todo comment
+         */
         void SetNewWeights()
         {
             m_Weights = m_NewWeights;
         }
+        /**
+         * @todo comment
+         */
         double WeightedError(int idx)
         {
             return m_Error*m_Weights[idx];
         }
     private:
+        /**
+         * @todo comment
+         */
         double f(double x)
         {
             return 1.0/(1+exp(-x));
         }
+        /**
+         * @todo comment
+         */
         double df(double x)
         {
             auto tmp = f(x);
             return tmp*(1-tmp);
         }
+        /**
+         * @todo comment
+         */
         void BackPropAdjust(double delta, double gamma)
         {
             for(int i=0; i< m_NewWeights.size(); i++)
@@ -98,6 +130,9 @@ private:
         }
     };
 public:
+    /**
+     * @todo comment
+     */
     Network(const QVector<int> &layerSizes)
     {
         /// @todo check for at leas one layer.
@@ -130,6 +165,9 @@ public:
             m_Layers[i] = layer;
         }
     }
+    /**
+     * @todo comment
+     */
     ~Network()
     {
         qDeleteAll(m_InputLayer);
@@ -138,6 +176,9 @@ public:
             qDeleteAll(it);
         }
     }
+    /**
+     * @todo comment
+     */
     QVector<double> FeedForward(const QVector<double> &inputValues)
     {
         /// @todo check number of inputs == input layer size
@@ -163,6 +204,9 @@ public:
         }
         return result;
     }
+    /**
+     * @todo comment
+     */
     void BackPropagation(const QVector<double> &outputValues, double gamma)
     {
         /// @todo check number of outputs == output layer size
@@ -192,6 +236,9 @@ public:
                 }
             }
         }
+        /**
+         * @todo comment
+         */
         for(auto & it1 : m_Layers)
         {
             for(auto & it2 : it1)
@@ -202,8 +249,8 @@ public:
     }
 
 private:
-    QVector<QVector<Neuron *>>  m_Layers;
-    QVector<Neuron *>           m_InputLayer;
+    QVector<QVector<Neuron *>>  m_Layers;       ///< @todo comment
+    QVector<Neuron *>           m_InputLayer;   ///< @todo comment
 };
 
 } // namespace backprop
